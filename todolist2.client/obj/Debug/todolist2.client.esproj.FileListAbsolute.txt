@@ -1,0 +1,1 @@
+D:\,Ner\TodoList2\todolist2.client\obj\Debug\todolist2.client.esproj.CoreCompileInputs.cache

@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "NjLelcSfRwi6Y5vSmaPpjfBi4OTptqQwAVOYpbA39kU=",
+  "Source": "TodoList2.Server",
+  "BasePath": "_content/TodoList2.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "D:\\,Ner\\TodoList2\\todolist2.client\\todolist2.client.esproj",
+      "Version": 2,
+      "Source": "todolist2.client",
+      "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
