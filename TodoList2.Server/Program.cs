@@ -1,9 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using TodoList2.Server.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Configurar Entity Framework Core con InMemoryDatabase
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseInMemoryDatabase("TodoList"));
+
+// Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -25,6 +32,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Configurar fallback para React
 app.MapFallbackToFile("/index.html");
 
 app.Run();
