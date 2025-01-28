@@ -10,6 +10,7 @@ export interface Task {
 export interface CreateTaskDto {
     title: string;
     description: string;
+    isCompleted: boolean;
     status?: string; // "Pendiente" | "Haciendo" | "Hecho"
   }
   

@@ -45,17 +45,20 @@ namespace TodoList2.Server.Controllers
         public async Task<IActionResult> CreateTask([FromBody] TodoTask task)
         {
             if (string.IsNullOrEmpty(task.Title) || task.Description.Length < 10)
-                return BadRequest("El título es obligatorio y la descripción debe tener al menos 10 caracteres.");
+                return BadRequest("Título obligatorio y descripción >= 10 caracteres.");
 
-            // Asegura un valor válido en caso de que el front no lo mande
+            // Si no viene nada, forzamos "Pendiente" en el servidor:
             if (string.IsNullOrEmpty(task.Status))
                 task.Status = "Pendiente";
 
+            // Guardar
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
 
+            // Devolver la tarea con su status
             return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
         }
+
 
         // PUT: api/tasks/{id}
         [HttpPut("{id}")]

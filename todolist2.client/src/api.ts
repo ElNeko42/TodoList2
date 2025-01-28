@@ -11,8 +11,12 @@ export const getTasks = () => api.get<Task[]>("/tasks");
 
 // Crear una tarea 
 // (recibe CreateTaskDto y retorna Task creado)
-export const createTask = (dto: CreateTaskDto) =>
-  api.post<Task>("/tasks", dto);
+export const createTask = (dto: {
+  title: string;
+  description: string;
+  status?: string;
+}) => api.post<Task>("/tasks", dto);
+
 
 // Actualizar una tarea
 export const updateTask = (id: number, task: Task) =>

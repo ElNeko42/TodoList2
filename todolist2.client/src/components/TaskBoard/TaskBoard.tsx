@@ -23,19 +23,16 @@ const TaskBoard: React.FC = () => {
   };
 
   const handleCreateTask = async (title: string, description: string) => {
+    console.log("Creando con:", title, description);
     try {
-      // Creación con status "Pendiente" por defecto
-      const res = await createTask({
-        title,
-        description,
-        status: "Pendiente", 
-      });
-      // Insertamos al inicio, o simplemente al final
+      const res = await createTask({ title, description, status: "Pendiente" });
+      console.log("Respuesta del server:", res.data);
       setTasks((prev) => [res.data, ...prev]);
     } catch (error) {
       console.error("Error creating task:", error);
     }
   };
+  
 
   const handleDeleteTask = async (id: number) => {
     if (!window.confirm("¿Eliminar la tarea?")) return;
