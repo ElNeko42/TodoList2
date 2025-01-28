@@ -1,14 +1,19 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginForm from "./components/LoginForm/LoginForm";
 import TaskBoard from "./components/TaskBoard/TaskBoard";
-// import TodoList from "./components/TodoList/TodoList";
-
-import "./App.css";
 
 const App: React.FC = () => {
   return (
-    <div className="app-container">
-      <TaskBoard />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Ruta del Login */}
+        <Route path="/" element={<LoginForm />} />
+
+        {/* Ruta del ToDo List */}
+        <Route path="/todo" element={<TaskBoard />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
