@@ -1,0 +1,40 @@
+.todo-list {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.todo-list__input {
+    margin-bottom: 20px;
+}
+
+.todo-list__input input,
+.todo-list__input textarea {
+    background-color: #2e2e2e;
+    color: #fff;
+    border: 1px solid #444;
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.todo-list__input button {
+    padding: 10px 20px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.todo-list__input button:hover {
+    background-color: darkblue;
+}
+
+.todo-list__items {
+    list-style-type: none;
+    padding: 0;
+}
