@@ -1,12 +1,15 @@
 import React from "react";
-import TodoList from "./components/TodoList/TodoList";
+import TaskBoard from "./components/TaskBoard/TaskBoard";
+// import TodoList from "./components/TodoList/TodoList";
+
+import "./App.css";
 
 const App: React.FC = () => {
-    return (
-        <div>
-            <TodoList />
-        </div>
-    );
+  return (
+    <div className="app-container">
+      <TaskBoard />
+    </div>
+  );
 };
 
 export default App;

@@ -20,9 +20,14 @@ namespace TodoList2.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTasks()
         {
-            var tasks = await _context.Tasks.ToListAsync();
+            // Devuelve tareas ordenadas por CreatedAt descendente
+            var tasks = await _context.Tasks
+                .OrderByDescending(t => t.CreatedAt)
+                .ToListAsync();
+
             return Ok(tasks);
         }
+
 
         // GET: api/tasks/{id}
         [HttpGet("{id}")]
@@ -40,7 +45,11 @@ namespace TodoList2.Server.Controllers
         public async Task<IActionResult> CreateTask([FromBody] TodoTask task)
         {
             if (string.IsNullOrEmpty(task.Title) || task.Description.Length < 10)
-                return BadRequest("Title is required and description must have at least 10 characters.");
+                return BadRequest("El título es obligatorio y la descripción debe tener al menos 10 caracteres.");
+
+            // Asegura un valor válido en caso de que el front no lo mande
+            if (string.IsNullOrEmpty(task.Status))
+                task.Status = "Pendiente";
 
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
@@ -52,13 +61,18 @@ namespace TodoList2.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, [FromBody] TodoTask updatedTask)
         {
-            var task = await _context.Tasks.FindAsync(id);
-            if (task == null)
+            var existing = await _context.Tasks.FindAsync(id);
+            if (existing == null)
                 return NotFound();
 
-            task.Title = updatedTask.Title;
-            task.Description = updatedTask.Description;
-            task.IsCompleted = updatedTask.IsCompleted;
+            if (string.IsNullOrEmpty(updatedTask.Title) || updatedTask.Description.Length < 10)
+                return BadRequest("El título es obligatorio y la descripción debe tener al menos 10 caracteres.");
+
+            existing.Title = updatedTask.Title;
+            existing.Description = updatedTask.Description;
+
+            // Actualizamos Status
+            existing.Status = updatedTask.Status ?? existing.Status;
 
             await _context.SaveChangesAsync();
             return NoContent();

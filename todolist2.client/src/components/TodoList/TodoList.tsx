@@ -1,88 +1,107 @@
 import React, { useState, useEffect } from "react";
-import { getTasks, createTask, deleteTask } from "../../api";
-import TodoListItem from "./TodoListItem";
-import Header from "../Header/Header"; 
-import "./TodoList.css";
+import {  getTasks, createTask, deleteTask, updateTask } from "../../api";
 import { Task } from "./TodoList.types";
+import TodoListItem from "./TodoListItem";
+import "./TodoList.css";
 
 const TodoList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTask, setNewTask] = useState({ title: "", description: "" });
-  const [searchValue, setSearchValue] = useState(""); // <-- Estado para el texto de búsqueda
+  const [newTitle, setNewTitle] = useState("");
+  const [newDesc, setNewDesc] = useState("");
 
   useEffect(() => {
-    fetchTasks();
+    fetchAll();
   }, []);
 
-  const fetchTasks = async () => {
+  const fetchAll = async () => {
     try {
-      const response = await getTasks();
-      setTasks(response.data);
+      const res = await getTasks();
+      setTasks(res.data);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      console.error(error);
     }
   };
 
-  const handleCreateTask = async () => {
-    if (!newTask.title || newTask.description.length < 10) {
-      alert(
-        "El título es obligatorio y la descripción debe tener al menos 10 caracteres."
-      );
+  const handleCreate = async () => {
+    // Validaciones front
+    if (!newTitle.trim()) {
+      alert("El título es obligatorio");
+      return;
+    }
+    if (newDesc.trim().length < 10) {
+      alert("Descripción mínima de 10 caracteres");
       return;
     }
     try {
-      await createTask(newTask);
-      setNewTask({ title: "", description: "" });
-      fetchTasks();
+      const res = await createTask({
+        title: newTitle,
+        description: newDesc,
+      });
+      // Insertar al principio
+      setTasks((prev) => [res.data, ...prev]);
+      setNewTitle("");
+      setNewDesc("");
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error(error);
     }
   };
 
-  const handleDeleteTask = async (id: number) => {
+  const handleDelete = async (id: number) => {
+    if (!window.confirm("¿Eliminar esta tarea?")) return;
     try {
       await deleteTask(id);
-      fetchTasks();
+      setTasks((prev) => prev.filter((t) => t.id !== id));
     } catch (error) {
-      console.error("Error deleting task:", error);
+      console.error(error);
     }
   };
 
-  // Filtramos tareas según el texto introducido en la barra de búsqueda
-  const filteredTasks = tasks.filter((task) =>
-    task.title.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const handleUpdate = async (updated: Task) => {
+    // Validaciones front
+    if (!updated.title.trim()) {
+      alert("El título es obligatorio");
+      return;
+    }
+    if (updated.description.trim().length < 10) {
+      alert("Descripción mínima de 10 caracteres");
+      return;
+    }
+    try {
+      await updateTask(updated.id, updated);
+      // Reemplazar en el estado
+      setTasks((prev) =>
+        prev.map((t) => (t.id === updated.id ? updated : t))
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="todo-list">
-      {/* Header con la búsqueda */}
-      <Header searchValue={searchValue} onSearchChange={setSearchValue} />
-
-      {/* Formulario para crear una nueva tarea */}
       <div className="todo-list__input">
+        <h2>Nueva Tarea</h2>
         <input
           type="text"
           placeholder="Título"
-          value={newTask.title}
-          onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
         />
         <textarea
           placeholder="Descripción"
-          value={newTask.description}
-          onChange={(e) =>
-            setNewTask({ ...newTask, description: e.target.value })
-          }
+          value={newDesc}
+          onChange={(e) => setNewDesc(e.target.value)}
         />
-        <button onClick={handleCreateTask}>Agregar Tarea</button>
+        <button onClick={handleCreate}>Agregar</button>
       </div>
 
-      {/* Renderizado de tareas filtradas */}
       <ul className="todo-list__items">
-        {filteredTasks.map((task) => (
+        {tasks.map((task) => (
           <TodoListItem
             key={task.id}
             task={task}
-            onDelete={handleDeleteTask}
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
           />
         ))}
       </ul>
