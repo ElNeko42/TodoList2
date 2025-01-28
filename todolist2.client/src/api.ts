@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Task } from "./components/TodoList/TodoList.types"; // Ajusta la ruta según tu proyecto
+import { Task } from "./components/TodoList/TodoList.types"; 
 import { CreateTaskDto } from "./components/TodoList/TodoList.types";
 
 const api = axios.create({

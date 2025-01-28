@@ -45,18 +45,27 @@ const TaskBoard: React.FC = () => {
   };
 
   // Cambiar el status de la tarea (por ejemplo con un menú o un botón)
-  const handleStatusChange = async (task: Task, newStatus: string) => {
-    try {
-      const updatedTask = { ...task, status: newStatus };
-      await updateTask(task.id, updatedTask);
-      // Reemplazamos en el estado local
-      setTasks((prev) =>
-        prev.map((t) => (t.id === task.id ? updatedTask : t))
-      );
-    } catch (error) {
-      console.error("Error updating status:", error);
-    }
+    const handleStatusChange = async (task: Task, newStatus: string) => {
+        try {
+        // Si el nuevo estado es "Hecho", isCompleted = true, en caso contrario false
+        const updatedTask = {
+            ...task,
+            status: newStatus,
+            isCompleted: (newStatus === "Hecho")
+        };
+    
+        // Llamas al PUT en tu API
+        await updateTask(task.id, updatedTask);
+    
+        // Actualizas el estado local
+        setTasks((prev) =>
+            prev.map((t) => (t.id === task.id ? updatedTask : t))
+        );
+        } catch (error) {
+        console.error("Error updating status:", error);
+        }
   };
+  
 
   return (
     <div className="task-board-container">

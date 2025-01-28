@@ -60,26 +60,26 @@ namespace TodoList2.Server.Controllers
         }
 
 
-        // PUT: api/tasks/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, [FromBody] TodoTask updatedTask)
         {
             var existing = await _context.Tasks.FindAsync(id);
-            if (existing == null)
-                return NotFound();
+            if (existing == null) return NotFound();
 
             if (string.IsNullOrEmpty(updatedTask.Title) || updatedTask.Description.Length < 10)
-                return BadRequest("El título es obligatorio y la descripción debe tener al menos 10 caracteres.");
+                return BadRequest("...");
 
             existing.Title = updatedTask.Title;
             existing.Description = updatedTask.Description;
-
-            // Actualizamos Status
             existing.Status = updatedTask.Status ?? existing.Status;
+
+            // Si está en "Hecho", isCompleted = true; caso contrario, false
+            existing.IsCompleted = (existing.Status == "Hecho");
 
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
 
         // DELETE: api/tasks/{id}
         [HttpDelete("{id}")]
